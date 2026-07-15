@@ -3,7 +3,7 @@
 param(
     [string]$InstallDir = $(if ($env:CC_INSTALL_DIR) { $env:CC_INSTALL_DIR } else { Join-Path $env:USERPROFILE 'CC' }),
     [string]$Repo = 'KATOUIV/CC',
-    [string]$Asset = 'CC-portable.zip'
+    [string]$AssetName = 'CC-portable.zip'
 )
 
 $Version = '1.0.1'
@@ -40,13 +40,13 @@ Write-Host "CC Portable Installer v$Version" -ForegroundColor Cyan
 Write-Host "Install dir: $InstallDir"
 
 $headers = Get-GhAuthHeaders
-$asset = Get-LatestReleaseAsset -Repository $Repo -FileName $Asset -Headers $headers
+$releaseAsset = Get-LatestReleaseAsset -Repository $Repo -FileName $AssetName -Headers $headers
 $tmpZip = Join-Path $env:TEMP "CC-portable-$([Guid]::NewGuid().ToString('N')).zip"
 
-Write-Host "Downloading $($asset.name) ($([math]::Round($asset.size/1MB,1)) MB)..." -ForegroundColor Cyan
+Write-Host "Downloading $($releaseAsset.name) ($([math]::Round($releaseAsset.size/1MB,1)) MB)..." -ForegroundColor Cyan
 $downloadHeaders = $headers.Clone()
 $downloadHeaders['Accept'] = 'application/octet-stream'
-Invoke-WebRequest -Uri $asset.url -Headers $downloadHeaders -OutFile $tmpZip -UseBasicParsing
+Invoke-WebRequest -Uri $releaseAsset.url -Headers $downloadHeaders -OutFile $tmpZip -UseBasicParsing
 
 if (Test-Path $InstallDir) {
     Write-Host "Folder exists, updating in place: $InstallDir" -ForegroundColor Yellow
