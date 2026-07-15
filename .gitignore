@@ -1,0 +1,8 @@
+# Large portable zip is distributed via GitHub Releases only
+CC-portable.zip
+*.zip
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
