@@ -1,11 +1,19 @@
 # CC - CloudCLI + CC Switch Portable
 
-**Current version: 1.0.0**
+**Current version: 1.0.1**
 
 ## One-line install (PowerShell)
 
+**Private repo:** run `gh auth login` once, then:
+
 ```powershell
 irm https://raw.githubusercontent.com/KATOUIV/CC/main/install.ps1 | iex
+```
+
+Or without `irm` (works when repo is private):
+
+```powershell
+gh api repos/KATOUIV/CC/contents/install.ps1 --jq .content | ForEach-Object { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_ -replace "`n","")) } | Invoke-Expression
 ```
 
 Custom install path:

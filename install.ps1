@@ -6,13 +6,28 @@ param(
     [string]$Asset = 'CC-portable.zip'
 )
 
-$Version = '1.0.0'
+$Version = '1.0.1'
+
+function Get-GhAuthHeaders {
+    $headers = @{ 'User-Agent' = 'CC-Portable-Installer' }
+    $token = $env:GITHUB_TOKEN
+    if ([string]::IsNullOrWhiteSpace($token)) {
+        try { $token = (gh auth token 2>$null).Trim() } catch {}
+    }
+    if (-not [string]::IsNullOrWhiteSpace($token)) {
+        $headers['Authorization'] = "Bearer $token"
+    }
+    return $headers
+}
 
 function Get-LatestReleaseAssetUrl {
-    param([string]$Repository, [string]$FileName)
+    param([string]$Repository, [string]$FileName, [hashtable]$Headers)
     $api = "https://api.github.com/repos/$Repository/releases/latest"
-    $headers = @{ 'User-Agent' = 'CC-Portable-Installer' }
-    $release = Invoke-RestMethod -Uri $api -Headers $headers
+    try {
+        $release = Invoke-RestMethod -Uri $api -Headers $Headers
+    } catch {
+        throw "Cannot access GitHub release for $Repository. If the repo is private, run 'gh auth login' first or set `$env:GITHUB_TOKEN."
+    }
     $asset = $release.assets | Where-Object { $_.name -eq $FileName } | Select-Object -First 1
     if (-not $asset) { throw "Release asset not found: $FileName. Upload it to GitHub Releases first." }
     return $asset.browser_download_url
@@ -24,11 +39,12 @@ $ErrorActionPreference = 'Stop'
 Write-Host "CC Portable Installer v$Version" -ForegroundColor Cyan
 Write-Host "Install dir: $InstallDir"
 
-$zipUrl = Get-LatestReleaseAssetUrl -Repository $Repo -FileName $Asset
+$headers = Get-GhAuthHeaders
+$zipUrl = Get-LatestReleaseAssetUrl -Repository $Repo -FileName $Asset -Headers $headers
 $tmpZip = Join-Path $env:TEMP "CC-portable-$([Guid]::NewGuid().ToString('N')).zip"
 
 Write-Host "Downloading..." -ForegroundColor Cyan
-Invoke-WebRequest -Uri $zipUrl -OutFile $tmpZip -UseBasicParsing
+Invoke-WebRequest -Uri $zipUrl -Headers $headers -OutFile $tmpZip -UseBasicParsing
 
 if (Test-Path $InstallDir) {
     Write-Host "Folder exists, updating in place: $InstallDir" -ForegroundColor Yellow
