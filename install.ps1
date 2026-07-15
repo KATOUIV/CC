@@ -20,7 +20,7 @@ function Get-GhAuthHeaders {
     return $headers
 }
 
-function Get-LatestReleaseAssetUrl {
+function Get-LatestReleaseAsset {
     param([string]$Repository, [string]$FileName, [hashtable]$Headers)
     $api = "https://api.github.com/repos/$Repository/releases/latest"
     try {
@@ -30,7 +30,7 @@ function Get-LatestReleaseAssetUrl {
     }
     $asset = $release.assets | Where-Object { $_.name -eq $FileName } | Select-Object -First 1
     if (-not $asset) { throw "Release asset not found: $FileName. Upload it to GitHub Releases first." }
-    return $asset.browser_download_url
+    return $asset
 }
 
 $ErrorActionPreference = 'Stop'
@@ -40,11 +40,13 @@ Write-Host "CC Portable Installer v$Version" -ForegroundColor Cyan
 Write-Host "Install dir: $InstallDir"
 
 $headers = Get-GhAuthHeaders
-$zipUrl = Get-LatestReleaseAssetUrl -Repository $Repo -FileName $Asset -Headers $headers
+$asset = Get-LatestReleaseAsset -Repository $Repo -FileName $Asset -Headers $headers
 $tmpZip = Join-Path $env:TEMP "CC-portable-$([Guid]::NewGuid().ToString('N')).zip"
 
-Write-Host "Downloading..." -ForegroundColor Cyan
-Invoke-WebRequest -Uri $zipUrl -Headers $headers -OutFile $tmpZip -UseBasicParsing
+Write-Host "Downloading $($asset.name) ($([math]::Round($asset.size/1MB,1)) MB)..." -ForegroundColor Cyan
+$downloadHeaders = $headers.Clone()
+$downloadHeaders['Accept'] = 'application/octet-stream'
+Invoke-WebRequest -Uri $asset.url -Headers $downloadHeaders -OutFile $tmpZip -UseBasicParsing
 
 if (Test-Path $InstallDir) {
     Write-Host "Folder exists, updating in place: $InstallDir" -ForegroundColor Yellow
