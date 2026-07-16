@@ -1,6 +1,6 @@
-# CC - CloudCLI + CC Switch Portable
+# CC - CloudCLI + CC Switch 便携包
 
-**Current version: 1.0.1**
+**当前版本：1.0.1**
 
 ## 使用协议
 
@@ -21,7 +21,7 @@
 
 ## 方式一：官方 npm 安装（推荐有 Node 的用户）
 
-**要求：** 已安装 [Node.js](https://nodejs.org/)（建议 v18+）
+**要求：** 已安装 [Node.js](https://nodejs.org/)（建议 v18 或更高）
 
 ```powershell
 npm install -g @cloudcli-ai/cloudcli
@@ -35,7 +35,7 @@ $env:CLOUDCLI_HOME='D:\my-cloudcli-data'
 cloudcli
 ```
 
-安装后默认在浏览器打开本地界面（常见为 `http://127.0.0.1:3001`）。  
+安装后一般会在浏览器打开本地界面：http://127.0.0.1:3001  
 API Token 等配置按 CloudCLI / Claude Code 官方说明填写。
 
 卸载：
@@ -48,45 +48,59 @@ npm uninstall -g @cloudcli-ai/cloudcli
 
 ---
 
-## 方式二：便携包一行安装（零环境）
+## 方式二：便携包一行安装（零环境，推荐小白）
+
+在 PowerShell 中执行：
 
 ```powershell
 irm https://raw.githubusercontent.com/KATOUIV/CC/main/install.ps1 | iex
 ```
 
-自定义安装路径：
+默认会安装到你的用户目录下的 `CC` 文件夹，例如：
+
+`C:\Users\你的用户名\CC`
+
+（「你的用户名」就是 Windows 登录名，一般是 `C:\Users\` 后面那一段。）
+
+想装到别的盘，可以这样：
 
 ```powershell
 $env:CC_INSTALL_DIR='D:\CC'; irm https://raw.githubusercontent.com/KATOUIV/CC/main/install.ps1 | iex
 ```
 
-### 安装后（便携包）
+### 安装完成后怎么用
 
-1. 打开 `%USERPROFILE%\CC\START-CC-Switch.bat`，配置 API Token  
-2. 运行 `%USERPROFILE%\CC\START-CloudCLI.bat`  
-3. 浏览器：http://127.0.0.1:3001  
+1. 打开安装目录里的 `START-CC-Switch.bat`，配置 API Token  
+2. 再运行 `START-CloudCLI.bat`  
+3. 用浏览器打开：http://127.0.0.1:3001  
 
-### 手动下载
+### 手动下载安装
 
-从 [Releases](https://github.com/KATOUIV/CC/releases) 下载 `CC-portable.zip`，解压后运行 `SETUP.bat`。
+1. 打开 [Releases（发布页）](https://github.com/KATOUIV/CC/releases)  
+2. 下载最新的 `CC-portable.zip`  
+3. 解压到任意文件夹  
+4. **第一次**双击 `SETUP.bat`（必做）  
+5. 再按上面「安装完成后怎么用」操作  
 
-### 便携包文件说明
+### 便携包里主要文件
 
-| File | Purpose |
-|------|---------|
-| SETUP.bat | First-time setup |
-| START-CloudCLI.bat | Launch web UI |
-| START-CC-Switch.bat | Launch CC Switch |
-| README.txt | Full guide inside the package |
+| 文件 | 作用 |
+|------|------|
+| SETUP.bat | 首次安装 / 自检（新电脑解压后必跑一次） |
+| START-CloudCLI.bat | 启动 CloudCLI 网页界面 |
+| START-CC-Switch.bat | 启动 CC Switch（管理 API 账号） |
+| README.txt | 包内完整中文说明书 |
 
 ---
 
-## Publish new version (maintainer)
+## 维护者发布新版本
 
-1. Update `VERSION` and `CHANGELOG.md`
-2. Rebuild `CC-portable.zip` on Desktop
-3. Run `login-github.bat` (first time only)
-4. Run `publish.ps1`
+1. 更新 `VERSION` 和 `CHANGELOG.md`  
+2. 在桌面重新打包 `CC-portable.zip`  
+3. 首次发布先运行 `login-github.bat`  
+4. 运行 `publish.ps1`  
 
-- `install.ps1` - remote one-line installer (small, in git)
-- `CC-portable.zip` - full portable bundle (GitHub Release, not in git)
+说明：
+
+- `install.ps1`：一行安装脚本（在 git 仓库里）  
+- `CC-portable.zip`：完整便携包（只放在 GitHub Release，不进 git）  
