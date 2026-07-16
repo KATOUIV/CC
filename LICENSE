@@ -1,0 +1,73 @@
+# CC 使用协议（License）
+
+版权所有 © 2026 KATOUIV  
+本协议适用于本仓库源代码、安装脚本，以及 Releases 中发布的 `CC-portable.zip` 便携包（以下统称「本软件」）。
+
+---
+
+## 一、允许
+
+在遵守本协议的前提下，你可以：
+
+1. **个人非商业使用**：下载、安装、在自己的电脑上使用本软件。  
+2. **魔改仅限自用**：为个人学习或自用目的，修改本软件的脚本、配置或打包方式，**仅限自己使用**。  
+3. **按原样分享链接**：向他人分享本仓库或官方 Release 的原始下载地址（未经修改的官方发布物）。
+
+---
+
+## 二、禁止
+
+未经版权所有者书面许可，不得：
+
+1. **盈利 / 商业使用**  
+   - 出售本软件或其修改版  
+   - 将本软件用于任何收费服务、外包交付、商业培训打包售卖  
+   - 以本软件名义进行引流变现、付费分发、会员专享等营利行为  
+
+2. **二次分发魔改版**  
+   - 公开发布、上传网盘/群组、或另行开源/闭源分发「魔改版」「精简版」「增强版」  
+   - 去除本协议、作者信息后重新打包传播  
+   - 伪称自己为原作者或官方  
+
+3. **滥用商标与名义**  
+   - 使用易混淆的名称、图标，使人误以为是官方 CloudCLI 或本作者授权产品  
+
+---
+
+## 三、第三方组件说明
+
+本软件打包集成了第三方程序与依赖（包括但不限于 Node.js、Python、CloudCLI、CC Switch、各类 Skills/插件等）。  
+
+- 这些组件各自受其**原有开源/专有协议**约束。  
+- 本协议**仅约束**本仓库作者编写的脚本、文档、打包方式与整合产物的分发规则。  
+- 使用第三方组件时，你仍须遵守对应上游协议；上游协议与本协议冲突时，就该组件而言以上游为准。
+
+---
+
+## 四、免责声明
+
+本软件按「现状（AS IS）」提供，不作任何明示或暗示担保，包括但不限于适销性、特定用途适用性、不侵权。  
+因使用或无法使用本软件造成的任何损失，作者不承担责任。
+
+---
+
+## 五、终止
+
+一旦违反本协议，授权自动终止。你应停止使用并销毁相关副本（法律另有规定的除外）。
+
+---
+
+## 六、其他
+
+- 本协议构成关于本软件使用的完整约定。  
+- 如需商业授权、二次分发授权或其他例外许可，请联系仓库所有者：https://github.com/KATOUIV  
+
+使用、下载或复制本软件，即表示你已阅读并同意本协议。
+
+---
+
+## English Summary (non-binding convenience)
+
+Personal, non-commercial use is allowed. Private modifications for your own use only are allowed.  
+Commercial use, selling, paid redistribution, and public redistribution of modified builds are prohibited without written permission.  
+Third-party components remain under their original licenses. Provided AS IS, without warranty.
