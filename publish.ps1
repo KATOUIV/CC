@@ -1,7 +1,7 @@
 # Publish CC to GitHub (requires: gh auth login)
 param(
     [string]$Zip = 'C:\Users\katou\Desktop\CC-portable.zip',
-    [switch]$Public
+    [switch]$Private
 )
 $ErrorActionPreference = 'Stop'
 $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
@@ -21,7 +21,7 @@ if ($status) {
     git commit -m "Release $Tag"
 }
 
-$visibility = if ($Public) { '--public' } else { '--private' }
+$visibility = if ($Private) { '--private' } else { '--public' }
 $remotes = @(git remote 2>$null)
 if ($remotes -notcontains 'origin') {
     gh repo create CC $visibility --source=. --remote=origin --push --description "CloudCLI + CC Switch portable - one-line install"
@@ -40,8 +40,9 @@ CC Portable $Tag
 - One-line install: ``irm https://raw.githubusercontent.com/KATOUIV/CC/main/install.ps1 | iex``
 "@
 
-$existing = gh release view $Tag 2>$null
-if ($LASTEXITCODE -eq 0) {
+$existing = $null
+try { gh release view $Tag 2>$null | Out-Null; if ($LASTEXITCODE -eq 0) { $existing = $true } } catch {}
+if ($existing) {
     gh release upload $Tag $Zip --clobber
     gh release edit $Tag --title "CC $Tag" --notes $notes
     Write-Host "Updated existing release $Tag" -ForegroundColor Yellow

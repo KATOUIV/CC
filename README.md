@@ -4,16 +4,8 @@
 
 ## One-line install (PowerShell)
 
-**Private repo:** run `gh auth login` once, then:
-
 ```powershell
 irm https://raw.githubusercontent.com/KATOUIV/CC/main/install.ps1 | iex
-```
-
-Or without `irm` (works when repo is private):
-
-```powershell
-gh api repos/KATOUIV/CC/contents/install.ps1 --jq .content | ForEach-Object { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_ -replace "`n","")) } | Invoke-Expression
 ```
 
 Custom install path:
@@ -47,7 +39,6 @@ Download `CC-portable.zip` from [Releases](https://github.com/KATOUIV/CC/release
 2. Rebuild `CC-portable.zip` on Desktop
 3. Run `login-github.bat` (first time only)
 4. Run `publish.ps1`
-
 
 - `install.ps1` - remote one-line installer (small, in git)
 - `CC-portable.zip` - full portable bundle (GitHub Release, not in git)

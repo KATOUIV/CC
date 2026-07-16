@@ -26,7 +26,7 @@ function Get-LatestReleaseAsset {
     try {
         $release = Invoke-RestMethod -Uri $api -Headers $Headers
     } catch {
-        throw "Cannot access GitHub release for $Repository. If the repo is private, run 'gh auth login' first or set `$env:GITHUB_TOKEN."
+        throw "Cannot access GitHub release for $Repository. Check network or set `$env:GITHUB_TOKEN if needed."
     }
     $asset = $release.assets | Where-Object { $_.name -eq $FileName } | Select-Object -First 1
     if (-not $asset) { throw "Release asset not found: $FileName. Upload it to GitHub Releases first." }
@@ -44,9 +44,14 @@ $releaseAsset = Get-LatestReleaseAsset -Repository $Repo -FileName $AssetName -H
 $tmpZip = Join-Path $env:TEMP "CC-portable-$([Guid]::NewGuid().ToString('N')).zip"
 
 Write-Host "Downloading $($releaseAsset.name) ($([math]::Round($releaseAsset.size/1MB,1)) MB)..." -ForegroundColor Cyan
+# Prefer browser URL (public); fall back to API asset URL (works with/without token)
+$downloadUrl = $releaseAsset.browser_download_url
 $downloadHeaders = $headers.Clone()
-$downloadHeaders['Accept'] = 'application/octet-stream'
-Invoke-WebRequest -Uri $releaseAsset.url -Headers $downloadHeaders -OutFile $tmpZip -UseBasicParsing
+if ([string]::IsNullOrWhiteSpace($downloadUrl)) {
+    $downloadUrl = $releaseAsset.url
+    $downloadHeaders['Accept'] = 'application/octet-stream'
+}
+Invoke-WebRequest -Uri $downloadUrl -Headers $downloadHeaders -OutFile $tmpZip -UseBasicParsing
 
 if (Test-Path $InstallDir) {
     Write-Host "Folder exists, updating in place: $InstallDir" -ForegroundColor Yellow
